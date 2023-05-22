@@ -1,0 +1,31 @@
+// 1. Deploy Kubernetes to Azure, using CLI:
+
+// i. Get the latest available Kubernetes version in your West Europe region into a bash variable.
+
+  version=$(az aks get-versions -l "West Europe" --query 'orchestrators[-1].orchestratorVersion' -o tsv)
+  
+// ii. Create a Resource Group
+
+  az group create --name AKSRG --location "West Europe"
+  
+// iii. Create AKS using the latest version available
+
+ az aks create --resource-group AKSRG --name aksdevopsclusterlab --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location "West Europe"
+ 
+// 2. Deploy Azure Container Registry(ACR): Run the below command to create your own private container registry using Azure Container Registry (ACR).
+ 
+ az acr create --resource-group AKSRG --name aksmstudenny --sku Standard --location "West Europe"
+ 
+// 3. Authenticate with Azure Container Registry from Azure Kubernetes Service : When you’re using Azure Container Registry (ACR) with Azure Kubernetes Service (AKS), an authentication mechanism needs to be established.
+You can set up the AKS to ACR integration in a few simple commands with the Azure CLI. This integration assigns the AcrPull role to the managed identity associated to the AKS Cluster.
+
+ az aks update -n $AKS_CLUSTER_NAME -g $AKS_RESOURCE_GROUP --attach-acr $ACR_NAME
+ az aks update -n aksdevopsclusterlab -g $AKSRG --attach-acr $acrmstudenny
+ 
+// 4. Create Azure SQL server and Database: Create an Azure SQL server.
+
+ az sql server create -l "West Europe" -g AKSRG -n sqlmstudenny -u sqladmin -p P2ssw0rd1234
+ 
+// create a database
+
+ az sql db create -g AKSRG -s sqlmstudenny -n mhcdb --service-objective S0
