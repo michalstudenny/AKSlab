@@ -12,7 +12,7 @@
 
  az aks create --resource-group AKSRG --name aksdevopsclusterlab --enable-addons monitoring --kubernetes-version $version --generate-ssh-keys --location "West Europe"
  
-// 2. Deploy Azure Container Registry(ACR): Run the below command to create your own private container registry using Azure Container Registry (ACR).
+// 2. Deploy Azure Container Registry(ACR): Create private container registry using Azure Container Registry (ACR).
  
  az acr create --resource-group AKSRG --name aksmstudenny --sku Standard --location "West Europe"
  
